@@ -1,6 +1,11 @@
 package model
 
-type BLock struct {
-	Id int64 `json:"id"`
-	Text string `json:"text"`
+import "time"
+
+type BlockModel struct {
+	Id             int64
+	Text           string
+	Rate           int
+	CreateDatetime time.Time
+	tableName      struct{} `pg:"block"`
 }

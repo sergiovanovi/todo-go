@@ -1,14 +1,32 @@
 package repository
 
-import "todo-go/model"
+import (
+	"fmt"
+	"todo-go/model"
+)
 
-func BlocksGetAll() []model.BLock {
-	user1 := model.BLock{Id: 1, Text: "Serg"}
-	user2 := model.BLock{Id: 2, Text: "Pasha"}
-	users := []model.BLock{user1, user2}
-	return users
+func BlocksGetAll() []model.BlockModel {
+	db := connect()
+	defer db.Close()
+
+	var blocks []model.BlockModel
+	err := db.Model(&blocks).Select()
+	if err != nil {
+		fmt.Println(err)
+		return []model.BlockModel{}
+	}
+	return blocks
 }
 
-func BlocksGetById(id *int64) model.BLock {
-	return model.BLock{Id: *id, Text: "name"}
+func BlocksGetById(id *int64) model.BlockModel {
+	db := connect()
+	defer db.Close()
+
+	block := model.BlockModel{Id: *id}
+	err := db.Model(&block).WherePK().Select()
+	if err != nil {
+		fmt.Println(err)
+		return model.BlockModel{}
+	}
+	return block
 }
